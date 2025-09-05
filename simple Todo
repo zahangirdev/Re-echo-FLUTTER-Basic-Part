@@ -1,0 +1,94 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final List<String> Todos = [];
+  final TextEditingController TextEdit = TextEditingController();
+  void addTodo() {
+    if (TextEdit.text.isNotEmpty) {
+      setState(() {
+        Todos.add(TextEdit.text);
+        TextEdit.clear();
+      });
+    }
+  }
+
+  void removeTodo(int index) {
+    setState(() {
+      Todos.removeAt(index);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("To Do"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: TextField(
+                  controller: TextEdit,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(), hintText: "Enter ToDo"),
+                )),
+                ElevatedButton(
+                    onPressed: () {
+                      addTodo();
+                      print("YES");
+                    },
+                    child: const Text("ADD")),
+              ],
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Expanded(
+                child: ListView.builder(
+              itemCount: Todos.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(Todos[index]),
+                    trailing: IconButton(
+                        onPressed: () {
+                          removeTodo(index);
+                        },
+                        icon: const Icon(Icons.delete)),
+                  ),
+                );
+              },
+            ))
+          ],
+        ),
+      ),
+    );
+  }
+}
