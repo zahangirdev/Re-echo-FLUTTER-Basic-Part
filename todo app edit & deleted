@@ -1,0 +1,139 @@
+import 'package:flutter/material.dart';
+
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final List<String> todos = [];
+  final TextEditingController textController = TextEditingController();
+
+  void addTodo() {
+    if (textController.text.isNotEmpty) {
+      setState(() {
+        todos.add(textController.text);
+        textController.clear();
+      });
+    }
+  }
+
+  void deleteTodo(int index) {
+    setState(() {
+      todos.removeAt(index);
+    });
+  }
+
+// Edit todo
+  void editTodoDialog(int index) {
+    textController.text = todos[index];
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: TextField(
+              controller: textController,
+              decoration: const InputDecoration(hintText: "Enter Your Update Text"),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      todos[index] = textController.text;
+                    });
+                  },
+                  child: const Text("YES")),
+              TextButton(
+                  onPressed: () {
+textController.clear();
+                      Navigator.pop(context);
+                 
+                  },
+                  child: const Text("NO")),
+            ],
+          );
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("My Todo App"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                    child: TextField(
+                  controller: textController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter a new task'),
+                )),
+                IconButton(
+                    onPressed: () {
+                      addTodo();
+                      print('Hello');
+                    },
+                    icon: const Icon(Icons.add))
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+                child: ListView.builder(
+              itemCount: todos.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                    title: Text(todos[index]),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              editTodoDialog(index);
+                            },
+                            icon: const Icon(Icons.edit)),
+                        IconButton(
+                            onPressed: () {
+                              deleteTodo(index);
+                            },
+                            icon: const Icon(Icons.delete)),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            )),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
