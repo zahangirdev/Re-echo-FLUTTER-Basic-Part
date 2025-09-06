@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const PoetryApp());
+}
+
+class PoetryApp extends StatelessWidget {
+  const PoetryApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Poetry Book',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: const PoetryHomePage(),
+    );
+  }
+}
+
+class PoetryHomePage extends StatelessWidget {
+  const PoetryHomePage({super.key});
+
+  // Dummy poetry list
+  final List<Map<String, String>> poems = const [
+    {
+      "title": "Poem 1",
+      "content":
+          "This is the first sample poem.\nIt is very simple for beginners."
+    },
+    {
+      "title": "Poem 2",
+      "content": "This is another poem.\nPoetry makes life beautiful."
+    },
+    {
+      "title": "Poem 3",
+      "content": "This is another poem.\nPoetry makes life beautiful."
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Poetry Book")),
+      body: ListView.builder(
+        itemCount: poems.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(poems[index]["title"]!),
+            trailing: const Icon(Icons.arrow_forward_ios),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PoetryDetailPage(
+                    title: poems[index]["title"]!,
+                    content: poems[index]["content"]!,
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PoetryDetailPage extends StatelessWidget {
+  final String title;
+  final String content;
+
+  const PoetryDetailPage({
+    super.key,
+    required this.title,
+    required this.content,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          content,
+          style: const TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+}
