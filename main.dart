@@ -7,19 +7,18 @@ void main() async {
 
   // Initialize Hive
   await Hive.initFlutter();
-
   // Open a box for favorites
-  await Hive.openBox('favorites');
+  await Hive.openBox<String>('favorites');
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Favorites",
-      theme: ThemeData(primarySwatch: Colors.purple),
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: FavoritePage(),
     );
